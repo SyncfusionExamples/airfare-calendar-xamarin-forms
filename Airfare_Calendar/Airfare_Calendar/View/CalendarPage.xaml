@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Airfare_Calendar"
+             xmlns:syncfusion="clr-namespace:Syncfusion.SfCalendar.XForms;assembly=Syncfusion.SfCalendar.XForms"
+             xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
+             x:Class="Airfare_Calendar.CalendarPage">
+    
+    <ContentPage.Behaviors>
+        <local:CalendarPageBehavior/>
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <Grid>
+          <syncfusion:SfCalendar x:Name="calendar" EnableDatesInPast="False"
+                                ShowLeadingAndTrailingDays="false" 
+                                ShowYearView="False"  
+                                VerticalOptions="FillAndExpand" 
+                                HorizontalOptions="FillAndExpand" 
+                                BackgroundColor="White"> 
+            <syncfusion:SfCalendar.MonthViewSettings>
+                    <syncfusion:MonthViewSettings HeaderBackgroundColor="#2A8A94"  
+                                                  HeaderTextColor="White" CellGridOptions="Both"
+                                              DayHeaderBackgroundColor="#2A8A94" 
+                                                  DateSelectionColor="Transparent"
+                                              TodaySelectionBackgroundColor="Transparent"
+                                              DayHeaderTextColor="White">
+                    <syncfusion:MonthViewSettings.CellTemplate>
+                            <DataTemplate>
+                                <Grid BackgroundColor="White" RowSpacing="0" ColumnSpacing="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.3*"/>
+                                    <RowDefinition Height="0.4*"/>
+                                    <RowDefinition Height="0.3*"/>
+                                </Grid.RowDefinitions>
+
+                                    <Label Text="{Binding Date.Day}" Grid.Row="0" Margin="1" VerticalTextAlignment="Start" BackgroundColor="Transparent">
+                                        <Label.FontSize>
+                                            <OnPlatform x:TypeArguments="x:Double">
+                                                <On Platform="iOS" Value="14" />
+                                                <On Platform="Android" Value="14" />
+                                                <On Platform="UWP" Value="20" />
+                                            </OnPlatform>
+                                        </Label.FontSize>
+                                    </Label>
+                                        <Label Text="{Binding Fare}" Grid.Row="1" TextColor="#2A8A94" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" BackgroundColor="Transparent">
+                                        <Label.FontSize>
+                                            <OnPlatform x:TypeArguments="x:Double">
+                                                <On Platform="iOS" Value="12" />
+                                                <On Platform="Android" Value="12" />
+                                                <On Platform="UWP" Value="22" />
+                                            </OnPlatform>
+                                        </Label.FontSize>
+                                    </Label>
+
+                                    <Grid Grid.Row="2" BackgroundColor="Transparent">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.3*"/>
+                                            <ColumnDefinition Width="0.7*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Text="{Binding Plane}" TextColor="{Binding Color}" Grid.Column="0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                                            <Label.FontFamily>
+                                                <OnPlatform x:TypeArguments="x:String">
+                                                    <On Platform="iOS" Value="aircraft" />
+                                                    <On Platform="Android" Value="aircraft.ttf#aircraft" />
+                                                    <On Platform="UWP" Value="Assets/aircraft.ttf#aircraft" />
+                                                </OnPlatform>
+                                            </Label.FontFamily>
+                                            <Label.FontSize>
+                                                <OnPlatform x:TypeArguments="x:Double">
+                                                    <On Platform="iOS" Value="12" />
+                                                    <On Platform="Android" Value="12" />
+                                                    <On Platform="UWP" Value="22" />
+                                                </OnPlatform>
+                                            </Label.FontSize>
+                                        </Label>
+                                        <Label Text="{Binding Airline}" Grid.Column="1" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start" VerticalTextAlignment="Center">
+                                            <Label.FontSize>
+                                                <OnPlatform x:TypeArguments="x:Double">
+                                                    <On Platform="iOS" Value="8" />
+                                                    <On Platform="Android" Value="8" />
+                                                    <On Platform="UWP" Value="16" />
+                                                </OnPlatform>
+                                            </Label.FontSize>
+                                        </Label>
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                    </syncfusion:MonthViewSettings.CellTemplate>
+                </syncfusion:MonthViewSettings>
+            </syncfusion:SfCalendar.MonthViewSettings>
+        </syncfusion:SfCalendar>
+          <busyindicator:SfBusyIndicator x:Name="busyindicator" Duration="3" ViewBoxHeight="100" ViewBoxWidth="100" 
+                                           AnimationType="SingleCircle" TextColor="#2A8A94" IsBusy="True"/>
+      </Grid>
+
+    </ContentPage.Content>
+</ContentPage>
