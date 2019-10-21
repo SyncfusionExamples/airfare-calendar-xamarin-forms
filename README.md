@@ -247,6 +247,20 @@ Calendar is a MVVM-friendly control with complete data-binding support, this all
 ## Designing airfare calendar
 In Xamarin,  you can customize the presentation of data and its interaction using [DataTemplate](https://docs.microsoft.com/en-us/xamarin/xamarin-forms/app-fundamentals/templates/data-templates/) and [data-binding](https://docs.microsoft.com/en-us/xamarin/xamarin-forms/app-fundamentals/data-binding/) support. Customize the calendar month cell to display the airfare, airway name and image based on the airline ID in each cell by using the CellTemplate property.  Bind the data appended in the view model using the properties of AirfareViewModel.
 
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Airfare_Calendar"
+             xmlns:syncfusion="clr-namespace:Syncfusion.SfCalendar.XForms;assembly=Syncfusion.SfCalendar.XForms"
+             xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
+             x:Class="Airfare_Calendar.CalendarPage">
+    
+    <ContentPage.Behaviors>
+        <local:CalendarPageBehavior/>
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <Grid>
+          <syncfusion:SfCalendar x:Name="calendar" EnableDatesInPast="False"
                                 ShowLeadingAndTrailingDays="false" 
                                 ShowYearView="False"  
                                 VerticalOptions="FillAndExpand" 
@@ -254,25 +268,21 @@ In Xamarin,  you can customize the presentation of data and its interaction usin
                                 BackgroundColor="White"> 
             <syncfusion:SfCalendar.MonthViewSettings>
                     <syncfusion:MonthViewSettings HeaderBackgroundColor="#2A8A94"  
-                       HeaderTextColor="White" CellGridOptions="Both"
-                       DayHeaderBackgroundColor="#2A8A94"
-                       DateSelectionColor="Transparent"
- TodaySelectionBackgroundColor="Transparent"
-                       DayHeaderTextColor="White">
+                                                  HeaderTextColor="White" CellGridOptions="Both"
+                                                  DayHeaderBackgroundColor="#2A8A94" 
+                                                  DateSelectionColor="Transparent"
+                                              TodaySelectionBackgroundColor="Transparent"
+                                              DayHeaderTextColor="White">
                     <syncfusion:MonthViewSettings.CellTemplate>
                             <DataTemplate>
-<Grid BackgroundColor="White" 
-                RowSpacing="0" ColumnSpacing="0">
+                                <Grid BackgroundColor="White" RowSpacing="0" ColumnSpacing="0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="0.3*"/>
                                     <RowDefinition Height="0.4*"/>
                                     <RowDefinition Height="0.3*"/>
                                 </Grid.RowDefinitions>
 
-<Label Text="{Binding Date.Day}" 
-Grid.Row="0" Margin="1" 
-      VerticalTextAlignment="Start" 
-        BackgroundColor="Transparent">
+                                    <Label Text="{Binding Date.Day}" Grid.Row="0" Margin="1" VerticalTextAlignment="Start" BackgroundColor="Transparent">
                                         <Label.FontSize>
                                             <OnPlatform x:TypeArguments="x:Double">
                                                 <On Platform="iOS" Value="14" />
@@ -281,11 +291,7 @@ Grid.Row="0" Margin="1"
                                             </OnPlatform>
                                         </Label.FontSize>
                                     </Label>
-                                        <Label Text="{Binding Fare}" 
-                              Grid.Row="1" TextColor="#2A8A94" FontAttributes="Bold"
-                              HorizontalTextAlignment="Start" 
-                              VerticalTextAlignment="Center" 
-                              BackgroundColor="Transparent">
+                                        <Label Text="{Binding Fare}" Grid.Row="1" TextColor="#2A8A94" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" BackgroundColor="Transparent">
                                         <Label.FontSize>
                                             <OnPlatform x:TypeArguments="x:Double">
                                                 <On Platform="iOS" Value="12" />
@@ -304,9 +310,9 @@ Grid.Row="0" Margin="1"
                                         <Label Text="{Binding Plane}" TextColor="{Binding Color}" Grid.Column="0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
                                             <Label.FontFamily>
                                                 <OnPlatform x:TypeArguments="x:String">
-<On Platform="iOS" Value="aircraft" />
-<On Platform="Android" Value="aircraft.ttf#aircraft" />
-<On Platform="UWP" Value="Assets/aircraft.ttf#aircraft" />
+                                                    <On Platform="iOS" Value="aircraft" />
+                                                    <On Platform="Android" Value="aircraft.ttf#aircraft" />
+                                                    <On Platform="UWP" Value="Assets/aircraft.ttf#aircraft" />
                                                 </OnPlatform>
                                             </Label.FontFamily>
                                             <Label.FontSize>
@@ -333,6 +339,11 @@ Grid.Row="0" Margin="1"
                 </syncfusion:MonthViewSettings>
             </syncfusion:SfCalendar.MonthViewSettings>
         </syncfusion:SfCalendar>
+          <busyindicator:SfBusyIndicator x:Name="busyindicator" Duration="3" ViewBoxHeight="100" ViewBoxWidth="100" 
+                                           AnimationType="SingleCircle" TextColor="#2A8A94" IsBusy="True"/>
+      </Grid>
+    </ContentPage.Content>
+</ContentPage>
 
 Create a behavior class **CalendarPageBehavior**, initialize the view model with calendar date and set the binding context for each month cell in calendar using **OnMonthCellLoaded** event.
 
