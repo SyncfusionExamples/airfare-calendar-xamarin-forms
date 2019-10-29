@@ -2,6 +2,8 @@
 ## Overview
 While booking the flight tickets, the most generic thing is to find out the cheapest fares among the listed airlines in a calendar. Syncfusion [Xamarin.Forms calendar](https://www.syncfusion.com/xamarin-ui-controls/xamarin-calendar) with its rich feature set allows user to design Airfare calendar using data binding and template support.
 
+![Airfare calendar xamarin UWP](https://github.com/SyncfusionExamples/airfare-calendar-xamarin-forms/blob/master/Airfare%20xamarin.png)
+
 In this blog post, we will discuss how to design Airfare calendar and display the cheapest airfares among the listed airlines using Syncfusion Xamarin.Forms calendar component. If you are new to the calendar control, please read the [Getting Started](https://help.syncfusion.com/xamarin/sfcalendar/getting-started) article in the calendar documentation before proceeding.
 
 ## Creating view model
