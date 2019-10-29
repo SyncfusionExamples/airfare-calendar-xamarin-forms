@@ -164,7 +164,7 @@ namespace Airfare_Calendar
             this.Date = dateTime;
             if (this.BusyIndicator != null && this.BusyIndicator.IsVisible)
             {
-                await System.Threading.Tasks.Task.Delay(5000);
+                await System.Threading.Tasks.Task.Delay(1000);
                 this.BusyIndicator.IsVisible = false;
             }
 

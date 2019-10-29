@@ -20,9 +20,19 @@ namespace Airfare_Calendar
 
         private void WireEvents()
         {
+            calendar.MonthChanged += Calendar_MonthChanged;
             calendar.OnMonthCellLoaded += Calendar_OnMonthCellLoaded; 
         }
-         
+
+        private void Calendar_MonthChanged(object sender, MonthChangedEventArgs e)
+        {
+            if (this.busyIndicator.IsVisible)
+            {
+                return;
+            }
+
+            this.busyIndicator.IsVisible = true;
+        }
 
         private void Calendar_OnMonthCellLoaded(object sender, MonthCellLoadedEventArgs e)
         {
@@ -39,6 +49,7 @@ namespace Airfare_Calendar
 
         private void UnWireEvents()
         {
+            calendar.MonthChanged -= Calendar_MonthChanged;
             calendar.OnMonthCellLoaded -= Calendar_OnMonthCellLoaded; 
         }
     }
