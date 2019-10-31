@@ -19,8 +19,9 @@ Calendar is a MVVM-friendly control with complete data-binding support, this all
         private DateTime? date = null;
         private ObservableCollection<string> fares;
         private ObservableCollection<int> ids;
+        private SfBusyIndicator BusyIndicator;
+        
         public event PropertyChangedEventHandler PropertyChanged;
-        public SfBusyIndicator BusyIndicator;
 
         /// <summary>
         /// Gets or sets the airline id.
