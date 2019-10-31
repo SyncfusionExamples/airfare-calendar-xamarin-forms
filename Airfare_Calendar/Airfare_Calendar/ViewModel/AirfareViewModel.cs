@@ -18,9 +18,9 @@ namespace Airfare_Calendar
         private DateTime? date = null;
         private ObservableCollection<string> fares;
         private ObservableCollection<int> ids;
+        private SfBusyIndicator BusyIndicator;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public SfBusyIndicator BusyIndicator;
 
         /// <summary>
         /// Gets or sets the airline id.
