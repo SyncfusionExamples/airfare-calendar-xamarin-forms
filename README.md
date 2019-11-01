@@ -9,184 +9,44 @@ In this blog post, we will discuss how to design Airfare calendar and display th
 ## Creating view model
 Calendar is a MVVM-friendly control with complete data-binding support, this allows you to bind the real-time data from other sources. Create a view model **AirfareViewModel** with the required properties like Date, Fare, Airline and Id. Now, append the data, for demo purposes we are generating the random data. 
 
-    public class AirfareViewModel : INotifyPropertyChanged    
-    {
-        private int id;
-        private string fare;
-        private string airline;
-        private string plane;
-        private Color color; 
-        private DateTime? date = null;
-        private ObservableCollection<string> fares;
-        private ObservableCollection<int> ids;
+    public class AirfareViewModel : INotifyPropertyChanged
+    { 
+        private ObservableCollection<AirFare> airFareData;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public SfBusyIndicator BusyIndicator;
-
         /// <summary>
-        /// Gets or sets the airline id.
+        /// AirFare Data of Flight fare stored and retrieved.
         /// </summary>
-        public int Id
+        public ObservableCollection<AirFare> AirFareData  
         {
             get
             {
-                return this.id;
+                return this.airFareData;
             }
             set
             {
-                this.id = value;
-                OnPropertyChanged("Id");
+                this.airFareData = value;
+                OnPropertyChanged("AirFareData");
             }
         }
 
         /// <summary>
-        /// Gets or sets the calendar date.
+        /// Airfare View Model
         /// </summary>
-        public DateTime? Date
+        public AirfareViewModel()
         {
-            get
-            {
-                return this.date;
-            }
-            set
-            {
-                this.date = value;
-                OnPropertyChanged("Date");
-            }
+            AirFareData = new ObservableCollection<AirFare>(); 
+            this.GetAirFareData();
         }
 
-        /// <summary>
-        /// Gets or sets the airfare.
-        /// </summary>
-        public string Fare
-        {
-            get
-            {
-                return this.fare;
-            }
-            set
-            {
-                this.fare = value;
-                OnPropertyChanged("Fare");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the airline name.
-        /// </summary>
-        public string Airline
-        {
-            get
-            {
-                return this.airline;
-            }
-            set
-            {
-                this.airline = value;
-                OnPropertyChanged("Airline");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the airline image.
-        /// </summary>
-        public string Plane
-        {
-            get
-            {
-                return this.plane;
-            }
-            set
-            {
-                this.plane = value;
-                OnPropertyChanged("Plane");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the airline color.
-        /// </summary>
-        public Color Color
-        {
-            get
-            {
-                return this.color;
-            }
-            set
-            {
-                this.color = value;
-                OnPropertyChanged("Color");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the collection of airfare.
-        /// </summary>
-        public ObservableCollection<string> Fares
-        {
-            get
-            {
-                return this.fares;
-            }
-            set
-            {
-                this.fares = value;
-                OnPropertyChanged("Fares");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the collection of airline id.
-        /// </summary>
-        public ObservableCollection<int> Ids
-        {
-            get
-            {
-                return this.ids;
-            }
-            set
-            {
-                this.ids = value;
-                OnPropertyChanged("Ids");
-            }
-        }
-
-        public AirfareViewModel(SfBusyIndicator busyIndicator)
-        {
-            this.BusyIndicator = busyIndicator;
-            this.AppendAirfareData();
-        }
- 
         /// <summary>
         /// Updated the cheapest airfare based on the listed airlines.
         /// </summary>
-        public async void UpdateAirfareData(DateTime dateTime)
+        public AirFare UpdateAirfareData(DateTime dateTime)
         {
-            this.Date = dateTime;
-            if (this.BusyIndicator != null && this.BusyIndicator.IsVisible)
-            {
-                await System.Threading.Tasks.Task.Delay(5000);
-                this.BusyIndicator.IsVisible = false;
-            }
-
-            var fareIndex = dateTime.Date.Day;
-            if (fareIndex >= this.Fares.Count)
-            {
-                fareIndex = this.Fares.Count - 1;
-            }
-
-            this.Fare = this.Fares[fareIndex];
-
-            var id = (int)dateTime.Date.Day % this.Ids.Count;
-            if (id >= this.Ids.Count)
-            {
-                id = this.Ids.Count-1;
-            }
-
-            this.Id = this.Ids[id];
-            this.Airline = "Airline" + this.Id.ToString();
-            this.Plane = "O";
-            this.Color = this.GetPlaneColor(this.Id);
+            var fareData = this.AirFareData[dateTime.Date.DayOfYear % (AirFareData.Count - 1)];
+            fareData.Date = dateTime;
+            return fareData;
         }
 
         private Color GetPlaneColor(int airlineId)
@@ -199,47 +59,76 @@ Calendar is a MVVM-friendly control with complete data-binding support, this all
                 return Color.Red;
         }
 
-        private void AppendAirfareData()
+        private void GetAirFareData()
         {
-            this.Fares = new ObservableCollection<string>();
-            this.Ids = new ObservableCollection<int>();
+            var Fares = new ObservableCollection<string>();
+            var Ids = new ObservableCollection<int>(); 
+            FetchFareData(out Fares, out Ids);
+            //// Adding 100 flight fare data
+            for (int i = 0; i < 100; i++)
+            {
+                var airfare = new AirFare(); 
+                airfare.Fare = Fares[i % (Fares.Count - 1)]; 
+                var id = i % Ids.Count;
+                if (id >= Ids.Count)
+                {
+                    id = Ids.Count - 1;
+                }
 
-            this.Ids.Add(1);
-            this.Ids.Add(2);
-            this.Ids.Add(3);
-            this.Ids.Add(4);
-
-            this.Fares.Add("$134.50");
-            this.Fares.Add("$305.00");
-            this.Fares.Add("$152.66");
-            this.Fares.Add("$267.09");
-            this.Fares.Add("$189.20");
-            this.Fares.Add("$212.10");
-            this.Fares.Add("$350.50");
-            this.Fares.Add("$222.39");
-            this.Fares.Add("$238.83");
-            this.Fares.Add("$147.27");
-            this.Fares.Add("$115.43");
-            this.Fares.Add("$198.06");
-            this.Fares.Add("$189.83");
-            this.Fares.Add("$110.71");
-            this.Fares.Add("$152.10");
-            this.Fares.Add("$199.62");
-            this.Fares.Add("$146.15");
-            this.Fares.Add("$237.04");
-            this.Fares.Add("$101.72");
-            this.Fares.Add("$266.69");
-            this.Fares.Add("$332.48");
-            this.Fares.Add("$256.77");
-            this.Fares.Add("$449.68");
-            this.Fares.Add("$100.17");
-            this.Fares.Add("$153.31");
-            this.Fares.Add("$249.92");
-            this.Fares.Add("$254.59");
-            this.Fares.Add("$107.18");
-            this.Fares.Add("$219.04");
+                id = Ids[id];
+                airfare.Airline = "Airline" + id.ToString();
+                airfare.Plane = "\ue700";
+                airfare.Color = GetPlaneColor(id);
+                this.AirFareData.Add(airfare);
+            }
         }
 
+        private void FetchFareData(out ObservableCollection<string> Fares, out ObservableCollection<int> Ids)
+        {
+            Ids = new ObservableCollection<int>
+            {
+                1,
+                2,
+                3,
+                4
+            };
+
+            Fares = new ObservableCollection<string>();
+            Fares.Add("$134.50");
+            Fares.Add("$305.00");
+            Fares.Add("$152.66");
+            Fares.Add("$267.09");
+            Fares.Add("$189.20");
+            Fares.Add("$212.10");
+            Fares.Add("$350.50");
+            Fares.Add("$222.39");
+            Fares.Add("$238.83");
+            Fares.Add("$147.27");
+            Fares.Add("$115.43");
+            Fares.Add("$198.06");
+            Fares.Add("$189.83");
+            Fares.Add("$110.71");
+            Fares.Add("$152.10");
+            Fares.Add("$199.62");
+            Fares.Add("$146.15");
+            Fares.Add("$237.04");
+            Fares.Add("$100.17");
+            Fares.Add("$101.72");
+            Fares.Add("$266.69");
+            Fares.Add("$332.48");
+            Fares.Add("$256.77");
+            Fares.Add("$449.68");
+            Fares.Add("$100.17");
+            Fares.Add("$153.31");
+            Fares.Add("$249.92");
+            Fares.Add("$254.59");
+            Fares.Add("$332.48");
+            Fares.Add("$256.77");
+            Fares.Add("$449.68");
+            Fares.Add("$107.18");
+            Fares.Add("$219.04");
+        }
+        
         private void OnPropertyChanged(string propertyName)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -257,9 +146,9 @@ In Xamarin,  you can customize the presentation of data and its interaction usin
              xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
              x:Class="Airfare_Calendar.CalendarPage">
     
-    <ContentPage.Behaviors>
+<ContentPage.Behaviors>
         <local:CalendarPageBehavior/>
-    </ContentPage.Behaviors>
+</ContentPage.Behaviors>
     <ContentPage.Content>
         <Grid>
           <syncfusion:SfCalendar x:Name="calendar" EnableDatesInPast="False"
@@ -273,8 +162,8 @@ In Xamarin,  you can customize the presentation of data and its interaction usin
                                                   HeaderTextColor="White" CellGridOptions="Both"
                                                   DayHeaderBackgroundColor="#2A8A94" 
                                                   DateSelectionColor="Transparent"
-                                              TodaySelectionBackgroundColor="Transparent"
-                                              DayHeaderTextColor="White">
+                                                  TodaySelectionBackgroundColor="Transparent"
+                                                  DayHeaderTextColor="White">
                     <syncfusion:MonthViewSettings.CellTemplate>
                             <DataTemplate>
                                 <Grid BackgroundColor="White" RowSpacing="0" ColumnSpacing="0">
@@ -282,9 +171,9 @@ In Xamarin,  you can customize the presentation of data and its interaction usin
                                     <RowDefinition Height="0.3*"/>
                                     <RowDefinition Height="0.4*"/>
                                     <RowDefinition Height="0.3*"/>
-                                </Grid.RowDefinitions>
-
-                                    <Label Text="{Binding Date.Day}" Grid.Row="0" Margin="1" VerticalTextAlignment="Start" BackgroundColor="Transparent">
+                                </Grid.RowDefinitions> 
+                                    <Label Text="{Binding Date.Day}" Grid.Row="0" Margin="1" 
+                                           VerticalTextAlignment="Start" BackgroundColor="Transparent">
                                         <Label.FontSize>
                                             <OnPlatform x:TypeArguments="x:Double">
                                                 <On Platform="iOS" Value="14" />
@@ -293,7 +182,9 @@ In Xamarin,  you can customize the presentation of data and its interaction usin
                                             </OnPlatform>
                                         </Label.FontSize>
                                     </Label>
-                                        <Label Text="{Binding Fare}" Grid.Row="1" TextColor="#2A8A94" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" BackgroundColor="Transparent">
+                                        <Label Text="{Binding Fare}" Grid.Row="1" TextColor="#2A8A94" 
+                                               FontAttributes="Bold" HorizontalTextAlignment="Start" 
+                                               VerticalTextAlignment="Center" BackgroundColor="Transparent">
                                         <Label.FontSize>
                                             <OnPlatform x:TypeArguments="x:Double">
                                                 <On Platform="iOS" Value="12" />
@@ -301,20 +192,20 @@ In Xamarin,  you can customize the presentation of data and its interaction usin
                                                 <On Platform="UWP" Value="22" />
                                             </OnPlatform>
                                         </Label.FontSize>
-                                    </Label>
-
+                                    </Label> 
                                     <Grid Grid.Row="2" BackgroundColor="Transparent">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="0.3*"/>
                                             <ColumnDefinition Width="0.7*"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <Label Text="{Binding Plane}" TextColor="{Binding Color}" Grid.Column="0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                                        </Grid.ColumnDefinitions> 
+                                        <Label Text="{Binding Plane}" Margin="1,0,0,0" TextColor="{Binding Color}" Grid.Column="0" 
+                                               VerticalOptions="Center" HorizontalOptions="Center" 
+                                               HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
                                             <Label.FontFamily>
                                                 <OnPlatform x:TypeArguments="x:String">
-                                                    <On Platform="iOS" Value="aircraft" />
-                                                    <On Platform="Android" Value="aircraft.ttf#aircraft" />
-                                                    <On Platform="UWP" Value="Assets/aircraft.ttf#aircraft" />
+                                                    <On Platform="iOS" Value="airlines" />
+                                                    <On Platform="Android" Value="airlines.ttf#airlines" />
+                                                    <On Platform="UWP" Value="Assets/airlines.ttf#airlines" />
                                                 </OnPlatform>
                                             </Label.FontFamily>
                                             <Label.FontSize>
@@ -325,7 +216,8 @@ In Xamarin,  you can customize the presentation of data and its interaction usin
                                                 </OnPlatform>
                                             </Label.FontSize>
                                         </Label>
-                                        <Label Text="{Binding Airline}" Grid.Column="1" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start" VerticalTextAlignment="Center">
+                                        <Label Text="{Binding Airline}" Grid.Column="1" VerticalOptions="FillAndExpand" 
+                                               HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start" VerticalTextAlignment="Center">
                                             <Label.FontSize>
                                                 <OnPlatform x:TypeArguments="x:Double">
                                                     <On Platform="iOS" Value="8" />
@@ -340,37 +232,36 @@ In Xamarin,  you can customize the presentation of data and its interaction usin
                     </syncfusion:MonthViewSettings.CellTemplate>
                 </syncfusion:MonthViewSettings>
             </syncfusion:SfCalendar.MonthViewSettings>
-        </syncfusion:SfCalendar>
-          <busyindicator:SfBusyIndicator x:Name="busyindicator" Duration="3" ViewBoxHeight="100" ViewBoxWidth="100" 
-                                           AnimationType="SingleCircle" TextColor="#2A8A94" IsBusy="True"/>
+
+                <syncfusion:SfCalendar.BindingContext>
+                    <local:AirfareViewModel/>
+                </syncfusion:SfCalendar.BindingContext>
+            </syncfusion:SfCalendar> 
       </Grid>
     </ContentPage.Content>
-</ContentPage>
+    </ContentPage>
 
 Create a behavior class **CalendarPageBehavior**, initialize the view model with calendar date and set the binding context for each month cell in calendar using **OnMonthCellLoaded** event.
 
     public class CalendarPageBehavior : Behavior<ContentPage>
     {
-        private SfCalendar calendar;
-        private SfBusyIndicator busyIndicator; 
+        private SfCalendar calendar; 
         protected override void OnAttachedTo(ContentPage bindable)
         {
             base.OnAttachedTo(bindable);
             this.calendar = bindable.FindByName<SfCalendar>("calendar");
-            this.busyIndicator = bindable.FindByName<SfBusyIndicator>("busyindicator");
+            this.calendar.MinDate = DateTime.Now;
             this.WireEvents(); 
-            this.calendar.MinDate = DateTime.Now; 
         }
 
         private void WireEvents()
-        {
+        { 
             calendar.OnMonthCellLoaded += Calendar_OnMonthCellLoaded; 
         }
+          
         private void Calendar_OnMonthCellLoaded(object sender, MonthCellLoadedEventArgs e)
-        {
-            AirfareViewModel viewModel = new AirfareViewModel(busyIndicator);
-            viewModel.UpdateAirfareData(e.Date);
-            e.CellBindingContext = viewModel;
+        { 
+           e.CellBindingContext= (calendar.BindingContext as AirfareViewModel)?.UpdateAirfareData(e.Date); 
         }
 
         protected override void OnDetachingFrom(ContentPage bindable)
@@ -380,11 +271,10 @@ Create a behavior class **CalendarPageBehavior**, initialize the view model with
         }
 
         private void UnWireEvents()
-        {
+        { 
             calendar.OnMonthCellLoaded -= Calendar_OnMonthCellLoaded; 
         }
     }
-
 
 Now, calendar control is configured with an application to design and display the cheapest airfares among the listed airlines. Just running the sample with the previous steps will render a scheduler with appointments.
 
