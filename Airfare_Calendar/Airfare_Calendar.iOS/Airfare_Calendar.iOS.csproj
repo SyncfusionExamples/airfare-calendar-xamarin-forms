@@ -95,6 +95,7 @@
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <BundleResource Include="Resources\airlines.ttf" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -164,11 +165,5 @@
     <PackageReference Include="Syncfusion.Xamarin.SfBusyIndicator">
       <Version>17.3.0.9-beta</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Aeroplane.jpeg" />
-    <BundleResource Include="Resources\Aeroplane2.png" />
-    <BundleResource Include="Resources\Aeroplane3.jpg" />
-    <BundleResource Include="Resources\aircraft.ttf" />
   </ItemGroup>
 </Project>

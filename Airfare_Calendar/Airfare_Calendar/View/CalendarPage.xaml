@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Airfare_Calendar"
              xmlns:syncfusion="clr-namespace:Syncfusion.SfCalendar.XForms;assembly=Syncfusion.SfCalendar.XForms"
-             xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
              x:Class="Airfare_Calendar.CalendarPage">
     
     <ContentPage.Behaviors>
@@ -20,10 +19,10 @@
             <syncfusion:SfCalendar.MonthViewSettings>
                     <syncfusion:MonthViewSettings HeaderBackgroundColor="#2A8A94"  
                                                   HeaderTextColor="White" CellGridOptions="Both"
-                                              DayHeaderBackgroundColor="#2A8A94" 
+                                                  DayHeaderBackgroundColor="#2A8A94" 
                                                   DateSelectionColor="Transparent"
-                                              TodaySelectionBackgroundColor="Transparent"
-                                              DayHeaderTextColor="White">
+                                                  TodaySelectionBackgroundColor="Transparent"
+                                                  DayHeaderTextColor="White">
                     <syncfusion:MonthViewSettings.CellTemplate>
                             <DataTemplate>
                                 <Grid BackgroundColor="White" RowSpacing="0" ColumnSpacing="0">
@@ -31,9 +30,9 @@
                                     <RowDefinition Height="0.3*"/>
                                     <RowDefinition Height="0.4*"/>
                                     <RowDefinition Height="0.3*"/>
-                                </Grid.RowDefinitions>
-
-                                    <Label Text="{Binding Date.Day}" Grid.Row="0" Margin="1" VerticalTextAlignment="Start" BackgroundColor="Transparent">
+                                </Grid.RowDefinitions> 
+                                    <Label Text="{Binding Date.Day}" Grid.Row="0" Margin="1" 
+                                           VerticalTextAlignment="Start" BackgroundColor="Transparent">
                                         <Label.FontSize>
                                             <OnPlatform x:TypeArguments="x:Double">
                                                 <On Platform="iOS" Value="14" />
@@ -42,7 +41,9 @@
                                             </OnPlatform>
                                         </Label.FontSize>
                                     </Label>
-                                        <Label Text="{Binding Fare}" Grid.Row="1" TextColor="#2A8A94" FontAttributes="Bold" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" BackgroundColor="Transparent">
+                                        <Label Text="{Binding Fare}" Grid.Row="1" TextColor="#2A8A94" 
+                                               FontAttributes="Bold" HorizontalTextAlignment="Start" 
+                                               VerticalTextAlignment="Center" BackgroundColor="Transparent">
                                         <Label.FontSize>
                                             <OnPlatform x:TypeArguments="x:Double">
                                                 <On Platform="iOS" Value="12" />
@@ -50,20 +51,20 @@
                                                 <On Platform="UWP" Value="22" />
                                             </OnPlatform>
                                         </Label.FontSize>
-                                    </Label>
-
+                                    </Label> 
                                     <Grid Grid.Row="2" BackgroundColor="Transparent">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="0.3*"/>
                                             <ColumnDefinition Width="0.7*"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <Label Text="{Binding Plane}" TextColor="{Binding Color}" Grid.Column="0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                                        </Grid.ColumnDefinitions> 
+                                        <Label Text="{Binding Plane}" Margin="1,0,0,0" TextColor="{Binding Color}" Grid.Column="0" 
+                                               VerticalOptions="Center" HorizontalOptions="Center" 
+                                               HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
                                             <Label.FontFamily>
                                                 <OnPlatform x:TypeArguments="x:String">
-                                                    <On Platform="iOS" Value="aircraft" />
-                                                    <On Platform="Android" Value="aircraft.ttf#aircraft" />
-                                                    <On Platform="UWP" Value="Assets/aircraft.ttf#aircraft" />
+                                                    <On Platform="iOS" Value="airlines" />
+                                                    <On Platform="Android" Value="airlines.ttf#airlines" />
+                                                    <On Platform="UWP" Value="Assets/airlines.ttf#airlines" />
                                                 </OnPlatform>
                                             </Label.FontFamily>
                                             <Label.FontSize>
@@ -74,7 +75,8 @@
                                                 </OnPlatform>
                                             </Label.FontSize>
                                         </Label>
-                                        <Label Text="{Binding Airline}" Grid.Column="1" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start" VerticalTextAlignment="Center">
+                                        <Label Text="{Binding Airline}" Grid.Column="1" VerticalOptions="FillAndExpand" 
+                                               HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Start" VerticalTextAlignment="Center">
                                             <Label.FontSize>
                                                 <OnPlatform x:TypeArguments="x:Double">
                                                     <On Platform="iOS" Value="8" />
@@ -89,10 +91,11 @@
                     </syncfusion:MonthViewSettings.CellTemplate>
                 </syncfusion:MonthViewSettings>
             </syncfusion:SfCalendar.MonthViewSettings>
-        </syncfusion:SfCalendar>
-          <busyindicator:SfBusyIndicator x:Name="busyindicator" Duration="3" ViewBoxHeight="100" ViewBoxWidth="100" 
-                                           AnimationType="SingleCircle" TextColor="#2A8A94" IsBusy="True"/>
-      </Grid>
 
+                <syncfusion:SfCalendar.BindingContext>
+                    <local:AirfareViewModel/>
+                </syncfusion:SfCalendar.BindingContext>
+            </syncfusion:SfCalendar> 
+      </Grid>
     </ContentPage.Content>
 </ContentPage>

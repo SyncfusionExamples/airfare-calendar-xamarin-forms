@@ -9,7 +9,7 @@ In this blog post, we will discuss how to design Airfare calendar and display th
 ## Creating view model
 Calendar is a MVVM-friendly control with complete data-binding support, this allows you to bind the real-time data from other sources. Create a view model **AirfareViewModel** with the required properties like Date, Fare, Airline and Id. Now, append the data, for demo purposes we are generating the random data. 
 
-    public class AirfareViewModel : INotifyPropertyChanged
+    public class AirfareViewModel : INotifyPropertyChanged    
     {
         private int id;
         private string fare;
@@ -19,9 +19,9 @@ Calendar is a MVVM-friendly control with complete data-binding support, this all
         private DateTime? date = null;
         private ObservableCollection<string> fares;
         private ObservableCollection<int> ids;
-        private SfBusyIndicator BusyIndicator;
-        
+
         public event PropertyChangedEventHandler PropertyChanged;
+        public SfBusyIndicator BusyIndicator;
 
         /// <summary>
         /// Gets or sets the airline id.
@@ -165,7 +165,7 @@ Calendar is a MVVM-friendly control with complete data-binding support, this all
             this.Date = dateTime;
             if (this.BusyIndicator != null && this.BusyIndicator.IsVisible)
             {
-                await System.Threading.Tasks.Task.Delay(1000);
+                await System.Threading.Tasks.Task.Delay(5000);
                 this.BusyIndicator.IsVisible = false;
             }
 
@@ -271,7 +271,7 @@ In Xamarin,  you can customize the presentation of data and its interaction usin
             <syncfusion:SfCalendar.MonthViewSettings>
                     <syncfusion:MonthViewSettings HeaderBackgroundColor="#2A8A94"  
                                                   HeaderTextColor="White" CellGridOptions="Both"
-                                              DayHeaderBackgroundColor="#2A8A94" 
+                                                  DayHeaderBackgroundColor="#2A8A94" 
                                                   DateSelectionColor="Transparent"
                                               TodaySelectionBackgroundColor="Transparent"
                                               DayHeaderTextColor="White">
@@ -341,9 +341,10 @@ In Xamarin,  you can customize the presentation of data and its interaction usin
                 </syncfusion:MonthViewSettings>
             </syncfusion:SfCalendar.MonthViewSettings>
         </syncfusion:SfCalendar>
-          <busyindicator:SfBusyIndicator x:Name="busyindicator" Duration="3" ViewBoxHeight="100" ViewBoxWidth="100" AnimationType="SingleCircle" TextColor="#2A8A94" IsBusy="True"/>
-      </Grid> 
-    </ContentPage.Content> 
+          <busyindicator:SfBusyIndicator x:Name="busyindicator" Duration="3" ViewBoxHeight="100" ViewBoxWidth="100" 
+                                           AnimationType="SingleCircle" TextColor="#2A8A94" IsBusy="True"/>
+      </Grid>
+    </ContentPage.Content>
 </ContentPage>
 
 Create a behavior class **CalendarPageBehavior**, initialize the view model with calendar date and set the binding context for each month cell in calendar using **OnMonthCellLoaded** event.
@@ -363,20 +364,8 @@ Create a behavior class **CalendarPageBehavior**, initialize the view model with
 
         private void WireEvents()
         {
-            calendar.MonthChanged += Calendar_MonthChanged;
             calendar.OnMonthCellLoaded += Calendar_OnMonthCellLoaded; 
         }
-
-        private void Calendar_MonthChanged(object sender, MonthChangedEventArgs e)
-        {
-            if (this.busyIndicator.IsVisible)
-            {
-                return;
-            }
-
-            this.busyIndicator.IsVisible = true;
-        }
-
         private void Calendar_OnMonthCellLoaded(object sender, MonthCellLoadedEventArgs e)
         {
             AirfareViewModel viewModel = new AirfareViewModel(busyIndicator);
@@ -392,10 +381,10 @@ Create a behavior class **CalendarPageBehavior**, initialize the view model with
 
         private void UnWireEvents()
         {
-            calendar.MonthChanged -= Calendar_MonthChanged;
             calendar.OnMonthCellLoaded -= Calendar_OnMonthCellLoaded; 
         }
     }
+
 
 Now, calendar control is configured with an application to design and display the cheapest airfares among the listed airlines. Just running the sample with the previous steps will render a scheduler with appointments.
 

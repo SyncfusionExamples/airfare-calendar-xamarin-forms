@@ -1,191 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System; 
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Text;
-using Syncfusion.SfBusyIndicator.XForms;
+using System.ComponentModel; 
 using Xamarin.Forms;
 
 namespace Airfare_Calendar
 {
+    /// <summary>
+    /// Airfare View Model
+    /// </summary>
     public class AirfareViewModel : INotifyPropertyChanged
-    {
-        private int id;
-        private string fare;
-        private string airline;
-        private string plane;
-        private Color color; 
-        private DateTime? date = null;
-        private ObservableCollection<string> fares;
-        private ObservableCollection<int> ids;
-        private SfBusyIndicator BusyIndicator;
+    { 
+        private ObservableCollection<AirFare> airFareData;
 
         public event PropertyChangedEventHandler PropertyChanged;
-
         /// <summary>
-        /// Gets or sets the airline id.
+        /// AirFare Data of Flight fare stored and retrieved.
         /// </summary>
-        public int Id
+        public ObservableCollection<AirFare> AirFareData  
         {
             get
             {
-                return this.id;
+                return this.airFareData;
             }
             set
             {
-                this.id = value;
-                OnPropertyChanged("Id");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the calendar date.
-        /// </summary>
-        public DateTime? Date
-        {
-            get
-            {
-                return this.date;
-            }
-            set
-            {
-                this.date = value;
-                OnPropertyChanged("Date");
+                this.airFareData = value;
+                OnPropertyChanged("AirFareData");
             }
         }
 
         /// <summary>
-        /// Gets or sets the airfare.
+        /// Airfare View Model
         /// </summary>
-        public string Fare
+        public AirfareViewModel()
         {
-            get
-            {
-                return this.fare;
-            }
-            set
-            {
-                this.fare = value;
-                OnPropertyChanged("Fare");
-            }
+            AirFareData = new ObservableCollection<AirFare>(); 
+            this.GetAirFareData();
         }
 
-        /// <summary>
-        /// Gets or sets the airline name.
-        /// </summary>
-        public string Airline
-        {
-            get
-            {
-                return this.airline;
-            }
-            set
-            {
-                this.airline = value;
-                OnPropertyChanged("Airline");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the airline image.
-        /// </summary>
-        public string Plane
-        {
-            get
-            {
-                return this.plane;
-            }
-            set
-            {
-                this.plane = value;
-                OnPropertyChanged("Plane");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the airline color.
-        /// </summary>
-        public Color Color
-        {
-            get
-            {
-                return this.color;
-            }
-            set
-            {
-                this.color = value;
-                OnPropertyChanged("Color");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the collection of airfare.
-        /// </summary>
-        public ObservableCollection<string> Fares
-        {
-            get
-            {
-                return this.fares;
-            }
-            set
-            {
-                this.fares = value;
-                OnPropertyChanged("Fares");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the collection of airline id.
-        /// </summary>
-        public ObservableCollection<int> Ids
-        {
-            get
-            {
-                return this.ids;
-            }
-            set
-            {
-                this.ids = value;
-                OnPropertyChanged("Ids");
-            }
-        }
-
-        public AirfareViewModel(SfBusyIndicator busyIndicator)
-        {
-            this.BusyIndicator = busyIndicator;
-            this.AppendAirfareData();
-        }
- 
         /// <summary>
         /// Updated the cheapest airfare based on the listed airlines.
         /// </summary>
-        public async void UpdateAirfareData(DateTime dateTime)
+        public AirFare UpdateAirfareData(DateTime dateTime)
         {
-            this.Date = dateTime;
-            if (this.BusyIndicator != null && this.BusyIndicator.IsVisible)
-            {
-                await System.Threading.Tasks.Task.Delay(1000);
-                this.BusyIndicator.IsVisible = false;
-            }
-
-            var fareIndex = dateTime.Date.Day;
-            if (fareIndex >= this.Fares.Count)
-            {
-                fareIndex = this.Fares.Count - 1;
-            }
-
-            this.Fare = this.Fares[fareIndex];
-
-            var id = (int)dateTime.Date.Day % this.Ids.Count;
-            if (id >= this.Ids.Count)
-            {
-                id = this.Ids.Count-1;
-            }
-
-            this.Id = this.Ids[id];
-            this.Airline = "Airline" + this.Id.ToString();
-            this.Plane = "O";
-            this.Color = this.GetPlaneColor(this.Id);
+            var fareData = this.AirFareData[dateTime.Date.DayOfYear % (AirFareData.Count - 1)];
+            fareData.Date = dateTime;
+            return fareData;
         }
 
         private Color GetPlaneColor(int airlineId)
@@ -198,47 +58,76 @@ namespace Airfare_Calendar
                 return Color.Red;
         }
 
-        private void AppendAirfareData()
+        private void GetAirFareData()
         {
-            this.Fares = new ObservableCollection<string>();
-            this.Ids = new ObservableCollection<int>();
+            var Fares = new ObservableCollection<string>();
+            var Ids = new ObservableCollection<int>(); 
+            FetchFareData(out Fares, out Ids);
+            //// Adding 100 flight fare data
+            for (int i = 0; i < 100; i++)
+            {
+                var airfare = new AirFare(); 
+                airfare.Fare = Fares[i % (Fares.Count - 1)]; 
+                var id = i % Ids.Count;
+                if (id >= Ids.Count)
+                {
+                    id = Ids.Count - 1;
+                }
 
-            this.Ids.Add(1);
-            this.Ids.Add(2);
-            this.Ids.Add(3);
-            this.Ids.Add(4);
-
-            this.Fares.Add("$134.50");
-            this.Fares.Add("$305.00");
-            this.Fares.Add("$152.66");
-            this.Fares.Add("$267.09");
-            this.Fares.Add("$189.20");
-            this.Fares.Add("$212.10");
-            this.Fares.Add("$350.50");
-            this.Fares.Add("$222.39");
-            this.Fares.Add("$238.83");
-            this.Fares.Add("$147.27");
-            this.Fares.Add("$115.43");
-            this.Fares.Add("$198.06");
-            this.Fares.Add("$189.83");
-            this.Fares.Add("$110.71");
-            this.Fares.Add("$152.10");
-            this.Fares.Add("$199.62");
-            this.Fares.Add("$146.15");
-            this.Fares.Add("$237.04");
-            this.Fares.Add("$101.72");
-            this.Fares.Add("$266.69");
-            this.Fares.Add("$332.48");
-            this.Fares.Add("$256.77");
-            this.Fares.Add("$449.68");
-            this.Fares.Add("$100.17");
-            this.Fares.Add("$153.31");
-            this.Fares.Add("$249.92");
-            this.Fares.Add("$254.59");
-            this.Fares.Add("$107.18");
-            this.Fares.Add("$219.04");
+                id = Ids[id];
+                airfare.Airline = "Airline" + id.ToString();
+                airfare.Plane = "\ue700";
+                airfare.Color = GetPlaneColor(id);
+                this.AirFareData.Add(airfare);
+            }
         }
 
+        private void FetchFareData(out ObservableCollection<string> Fares, out ObservableCollection<int> Ids)
+        {
+            Ids = new ObservableCollection<int>
+            {
+                1,
+                2,
+                3,
+                4
+            };
+
+            Fares = new ObservableCollection<string>();
+            Fares.Add("$134.50");
+            Fares.Add("$305.00");
+            Fares.Add("$152.66");
+            Fares.Add("$267.09");
+            Fares.Add("$189.20");
+            Fares.Add("$212.10");
+            Fares.Add("$350.50");
+            Fares.Add("$222.39");
+            Fares.Add("$238.83");
+            Fares.Add("$147.27");
+            Fares.Add("$115.43");
+            Fares.Add("$198.06");
+            Fares.Add("$189.83");
+            Fares.Add("$110.71");
+            Fares.Add("$152.10");
+            Fares.Add("$199.62");
+            Fares.Add("$146.15");
+            Fares.Add("$237.04");
+            Fares.Add("$100.17");
+            Fares.Add("$101.72");
+            Fares.Add("$266.69");
+            Fares.Add("$332.48");
+            Fares.Add("$256.77");
+            Fares.Add("$449.68");
+            Fares.Add("$100.17");
+            Fares.Add("$153.31");
+            Fares.Add("$249.92");
+            Fares.Add("$254.59");
+            Fares.Add("$332.48");
+            Fares.Add("$256.77");
+            Fares.Add("$449.68");
+            Fares.Add("$107.18");
+            Fares.Add("$219.04");
+        }
+        
         private void OnPropertyChanged(string propertyName)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -1,5 +1,4 @@
-﻿using Syncfusion.SfBusyIndicator.XForms;
-using Syncfusion.SfCalendar.XForms;
+﻿using Syncfusion.SfCalendar.XForms;
 using System;
 using Xamarin.Forms;
 
@@ -7,38 +6,23 @@ namespace Airfare_Calendar
 {
     public class CalendarPageBehavior : Behavior<ContentPage>
     {
-        private SfCalendar calendar;
-        private SfBusyIndicator busyIndicator; 
+        private SfCalendar calendar; 
         protected override void OnAttachedTo(ContentPage bindable)
         {
             base.OnAttachedTo(bindable);
             this.calendar = bindable.FindByName<SfCalendar>("calendar");
-            this.busyIndicator = bindable.FindByName<SfBusyIndicator>("busyindicator");
+            this.calendar.MinDate = DateTime.Now;
             this.WireEvents(); 
-            this.calendar.MinDate = DateTime.Now; 
         }
 
         private void WireEvents()
-        {
-            calendar.MonthChanged += Calendar_MonthChanged;
+        { 
             calendar.OnMonthCellLoaded += Calendar_OnMonthCellLoaded; 
         }
-
-        private void Calendar_MonthChanged(object sender, MonthChangedEventArgs e)
-        {
-            if (this.busyIndicator.IsVisible)
-            {
-                return;
-            }
-
-            this.busyIndicator.IsVisible = true;
-        }
-
+          
         private void Calendar_OnMonthCellLoaded(object sender, MonthCellLoadedEventArgs e)
-        {
-            AirfareViewModel viewModel = new AirfareViewModel(busyIndicator);
-            viewModel.UpdateAirfareData(e.Date);
-            e.CellBindingContext = viewModel;
+        { 
+           e.CellBindingContext= (calendar.BindingContext as AirfareViewModel)?.UpdateAirfareData(e.Date); 
         }
 
         protected override void OnDetachingFrom(ContentPage bindable)
@@ -48,8 +32,7 @@ namespace Airfare_Calendar
         }
 
         private void UnWireEvents()
-        {
-            calendar.MonthChanged -= Calendar_MonthChanged;
+        { 
             calendar.OnMonthCellLoaded -= Calendar_OnMonthCellLoaded; 
         }
     }
