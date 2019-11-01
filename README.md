@@ -138,17 +138,17 @@ Calendar is a MVVM-friendly control with complete data-binding support, this all
 ## Designing airfare calendar
 In Xamarin,  you can customize the presentation of data and its interaction using [DataTemplate](https://docs.microsoft.com/en-us/xamarin/xamarin-forms/app-fundamentals/templates/data-templates/) and [data-binding](https://docs.microsoft.com/en-us/xamarin/xamarin-forms/app-fundamentals/data-binding/) support. Customize the calendar month cell to display the airfare, airway name and image based on the airline ID in each cell by using the CellTemplate property.  Bind the data appended in the view model using the properties of AirfareViewModel.
 
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+    <?xml version="1.0" encoding="utf-8" ?>
+    <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Airfare_Calendar"
              xmlns:syncfusion="clr-namespace:Syncfusion.SfCalendar.XForms;assembly=Syncfusion.SfCalendar.XForms"
              xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
              x:Class="Airfare_Calendar.CalendarPage">
     
-<ContentPage.Behaviors>
+    <ContentPage.Behaviors>
         <local:CalendarPageBehavior/>
-</ContentPage.Behaviors>
+    </ContentPage.Behaviors>
     <ContentPage.Content>
         <Grid>
           <syncfusion:SfCalendar x:Name="calendar" EnableDatesInPast="False"
