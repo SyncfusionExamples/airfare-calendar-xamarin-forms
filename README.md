@@ -4,7 +4,7 @@ While booking the flight tickets, the most generic thing is to find out the chea
 
 ![Airfare calendar xamarin UWP](https://github.com/SyncfusionExamples/airfare-calendar-xamarin-forms/blob/master/Airfare%20xamarin.png)
 
-In this blog post, we will discuss how to design Airfare calendar and display the cheapest airfares among the listed airlines using Syncfusion Xamarin.Forms calendar component. If you are new to the calendar control, please read the [Getting Started](https://help.syncfusion.com/xamarin/sfcalendar/getting-started) article in the calendar documentation before proceeding.
+In this [blog post](https://www.syncfusion.com/blogs/post/designing-an-airfare-calendar-in-xamarin-forms.aspx), we will discuss how to design Airfare calendar and display the cheapest airfares among the listed airlines using Syncfusion Xamarin.Forms calendar component. If you are new to the calendar control, please read the [Getting Started](https://help.syncfusion.com/xamarin/sfcalendar/getting-started) article in the calendar documentation before proceeding.
 
 ## Creating view model
 Calendar is a MVVM-friendly control with complete data-binding support, this allows you to bind the real-time data from other sources. Create a view model **AirfareViewModel** with the required properties like Date, Fare, Airline and Id. Now, append the data, for demo purposes we are generating the random data. 
